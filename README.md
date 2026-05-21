@@ -1,5 +1,7 @@
 # teensy41-serial-companion-go
 
+[![Golangci-lint](https://github.com/stpr-dev/teensy41-serial-companion-go/actions/workflows/lint.yml/badge.svg)](https://github.com/stpr-dev/teensy41-serial-companion-go/actions/workflows/lint.yml)
+
 Go companion code for testing USB serial transfer reliability with a Teensy 4.1.
 
 See [this blog post](https://stpr-dev.github.io/embedded/2026/05/19/teensy-usb-serial-max-speed/) for more information about why this project exists.
