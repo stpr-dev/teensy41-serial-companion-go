@@ -32,7 +32,7 @@ jobs:
           EXT=""
           [ "$GOOS" = "windows" ] && EXT=".exe"
           go build -ldflags="-s -w -X main.version=${{ github.ref_name }}" \
-            -o dist/myapp-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}${EXT} \
+            -o dist/serial-companion-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}${EXT} \
             .
 
       - name: Upload artifact
