@@ -1,0 +1,4 @@
+go.bug.st/serial v1.7.0 h1:Svs5xR0s4JF+KIg+1d9QE4iXqEIJvTr5vESFUjSu7mE=
+go.bug.st/serial v1.7.0/go.mod h1:PZfOSahry47TWtrd0tvoKZvmVa7FGrc/1xG9q8Ho3xU=
+golang.org/x/sys v0.44.0 h1:ildZl3J4uzeKP07r2F++Op7E9B29JRUy+a27EibtBTQ=
+golang.org/x/sys v0.44.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
