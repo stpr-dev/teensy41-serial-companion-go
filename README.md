@@ -14,21 +14,21 @@ This project sends a handshake to a Teensy 4.1, receives pseudo-random frames ov
 
 ## Files
 
-| File | Description |
-|------|-------------|
-| `main.go` | Entry point — parses flags, opens the serial port, sends the handshake, runs the loop, and writes timing output |
-| `loop_sequential.go` | Default loop implementation — reads and verifies frames sequentially (build tag: `!goroutine`) |
-| `loop_goroutine.go` | Goroutine-based variant — reads frames in a background goroutine and verifies in the main goroutine (build tag: `goroutine`) |
-| `jsf.go` | JSF32 PRNG, bit-identical to the firmware's C++ implementation |
+| File                 | Description                                                                                                                  |
+|----------------------|------------------------------------------------------------------------------------------------------------------------------|
+| `main.go`            | Entry point — parses flags, opens the serial port, sends the handshake, runs the loop, and writes timing output              |
+| `loop_sequential.go` | Default loop implementation — reads and verifies frames sequentially (build tag: `!goroutine`)                               |
+| `loop_goroutine.go`  | Goroutine-based variant — reads frames in a background goroutine and verifies in the main goroutine (build tag: `goroutine`) |
+| `jsf.go`             | JSF32 PRNG, bit-identical to the firmware's C++ implementation                                                               |
 
 ## Download
 
 Pre-built binaries for Windows and Linux (amd64) are attached to each [GitHub release](https://github.com/stpr-dev/teensy41-serial-companion-go/releases):
 
-| Platform | File |
-|----------|------|
-| Windows | `serial-companion-<version>-windows-amd64.exe` |
-| Linux | `serial-companion-<version>-linux-amd64` |
+| Platform | File                                           |
+|----------|------------------------------------------------|
+| Windows  | `serial-companion-<version>-windows-amd64.exe` |
+| Linux    | `serial-companion-<version>-linux-amd64`       |
 
 Download the binary for your platform, make it executable if needed (Linux: `chmod +x`), and run it directly — no Go installation required.
 
@@ -60,21 +60,21 @@ go run . --port <port> [options]
 
 ### Arguments
 
-| Argument | Default | Description |
-|----------|---------|-------------|
-| `--port` | (required) | Serial device path (e.g. `COM3` on Windows, `/dev/ttyACM0` on Linux) |
-| `--baud` | `8000000` | Baud rate |
-| `--read-timeout` | `1s` | Serial read timeout (e.g. `100ms`, `1s`), `0` means no timeout |
-| `--frame-size` | `2048` | Frame size in bytes (must be a multiple of 4) |
-| `--num-frames` | `16777216` | Number of frames to receive |
-| `--use-ack` | off | Enable ACK mode: send ACK after each frame and retry on failure |
-| `--timings-dir` | (none) | Directory to write per-frame timing `.bin` and `.json` sidecar files; created if absent |
+| Argument         | Default    | Description                                                                            |
+|------------------|------------|----------------------------------------------------------------------------------------|
+| `--port`         | (required) | Serial device path (e.g. `COM3` on Windows, `/dev/ttyACM0` on Linux)                   |
+| `--baud`         | `8000000`  | Baud rate. Teensy over USB serial ignores this.                                        |
+| `--read-timeout` | `1s`       | Serial read timeout (e.g. `100ms`, `1s`), `0` means no timeout                         |
+| `--frame-size`   | `2048`     | Frame size/length in bytes (must be a multiple of 4)                                   |
+| `--num-frames`   | `16777216` | Number of frames to receive                                                            |
+| `--use-ack`      | off        | Enable ACK mode: send ACK after each frame and retry on failure                        |
+| `--timings-dir`  | (none)     | Directory to write per-frame timing `.bin` and `.json` sidecar files; created if absent |
 
 ### Build tags
 
-| Tag | Effect |
-|-----|--------|
-| *(none)* | Builds `loop_sequential.go` — simple single-goroutine loop |
+| Tag         | Effect                                                                          |
+|-------------|---------------------------------------------------------------------------------|
+| *(none)*    | Builds `loop_sequential.go` — simple single-goroutine loop                      |
 | `goroutine` | Builds `loop_goroutine.go` — dedicated reader goroutine with a buffered channel |
 
 To use the goroutine variant:
@@ -122,10 +122,10 @@ When `--timings-dir` is set, two files are written per run:
 
 The companion program initiates each run by writing a 9-byte handshake to the Teensy:
 
-| Bytes | Type | Description |
-|-------|------|-------------|
-| 0–3 | `uint32_t` LE | Frame size in bytes (multiple of 4) |
-| 4–7 | `uint32_t` LE | Number of frames |
-| 8 | `uint8_t` | ACK mode: `0x00` = no ACK, any other value = use ACK |
+| Bytes | Type          | Description                                          |
+|-------|---------------|------------------------------------------------------|
+| 0–3   | `uint32_t` LE | Frame size in bytes (multiple of 4)                  |
+| 4–7   | `uint32_t` LE | Number of frames                                     |
+| 8     | `uint8_t`     | ACK mode: `0x00` = no ACK, any other value = use ACK |
 
 The Teensy then streams `num_frames` frames of `frame_size` bytes each. In ACK mode, the companion sends `0x01` (Ack) after each successfully received frame, or `0x03` (Retransmit) to request a retry (up to 5 retries before aborting).
