@@ -1,4 +1,4 @@
-module serial_reader
+module serial-companion
 
 go 1.26.0
 

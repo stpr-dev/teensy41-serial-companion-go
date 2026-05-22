@@ -21,7 +21,18 @@ This project sends a handshake to a Teensy 4.1, receives pseudo-random frames ov
 | `loop_goroutine.go` | Goroutine-based variant — reads frames in a background goroutine and verifies in the main goroutine (build tag: `goroutine`) |
 | `jsf.go` | JSF32 PRNG, bit-identical to the firmware's C++ implementation |
 
-## Setup
+## Download
+
+Pre-built binaries for Windows and Linux (amd64) are attached to each [GitHub release](https://github.com/stpr-dev/teensy41-serial-companion-go/releases):
+
+| Platform | File |
+|----------|------|
+| Windows | `serial-companion-<version>-windows-amd64.exe` |
+| Linux | `serial-companion-<version>-linux-amd64` |
+
+Download the binary for your platform, make it executable if needed (Linux: `chmod +x`), and run it directly — no Go installation required.
+
+## Building from source
 
 Requires Go 1.24+. Install dependencies:
 
@@ -29,7 +40,19 @@ Requires Go 1.24+. Install dependencies:
 go mod download
 ```
 
+Build a `serial-companion` binary:
+
+```
+go build -o serial-companion .
+```
+
 ## Usage
+
+```
+serial-companion --port <port> [options]
+```
+
+Or without building first:
 
 ```
 go run . --port <port> [options]
