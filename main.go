@@ -44,6 +44,7 @@ func mustReadFullWithRetry(port serial.Port, buf []byte, numRetries int, retryBy
 	for range numRetries {
 		err := mustReadFull(port, buf)
 		if err != nil {
+			clearBuffers(port)
 			if err := writeAck(port, retryByte); err != nil {
 				return err
 			}
@@ -56,7 +57,7 @@ func mustReadFullWithRetry(port serial.Port, buf []byte, numRetries int, retryBy
 	return fmt.Errorf("read failed after %d retries", numRetries)
 }
 
-func writeAndDrain(port serial.Port, buf []byte) error {
+func writeBytes(port serial.Port, buf []byte) error {
 	if len(buf) == 0 {
 		return nil
 	}
@@ -69,14 +70,14 @@ func writeAndDrain(port serial.Port, buf []byte) error {
 		remaining -= n
 		buf = buf[n:]
 	}
-	return port.Drain()
+	return nil
 }
 
 func writeAck(port serial.Port, ackByte byte) error {
 	if ackByte == 0 {
 		return nil // No ACK if ACK is 0x00
 	}
-	return writeAndDrain(port, []byte{ackByte})
+	return writeBytes(port, []byte{ackByte})
 }
 
 func deferClose(c io.Closer, name string) {
@@ -156,7 +157,7 @@ func main() {
 	}
 	handshakeData[8] = byte(ackByte)
 
-	if err := writeAndDrain(port, handshakeData); err != nil {
+	if err := writeBytes(port, handshakeData); err != nil {
 		log.Fatalf("Failed to send handshake data: %v", err)
 	}
 
