@@ -220,7 +220,7 @@ func main() {
 		}
 		meta := sidecar{
 			Version:      1,
-			Dtype:        "int64",
+			Dtype:        "uint64",
 			Endian:       "little",
 			NFrames:      uint64(numFrames) - 1,
 			Channels:     1,
